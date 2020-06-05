@@ -1,0 +1,45 @@
+SCRIPT
+
+SQL
+pregunta 1
+
+SELECT a.nom as nombre, (b.costo * c.cantidad_de_envios) as costo_total, b.zona as zona,
+case when a.nom = 'CARRIER A' then (c.cantidad_de_envios / 10000) 
+        when a.nom = 'CARRIER B' then (c.cantidad_de_envios / 10000)
+        when a.nom = 'CARRIER C' then (c.cantidad_de_envios / 3000)
+end as carriers
+FROM CARRIER a 
+INNER JOIN COSTOS b ON a.carrier_id = b.carrier_id
+INNER JOIN CANTIDAD_DE_ENVIOS c ON b.zona = c.zona
+ORDER BY b.zona,  (b.costo * c.cantidad_de_envios)
+
+pregunta 2
+
+Buscaria efectuar la mayor cantidad de envios. En base a la consulta anterior serian :
+40000 envios en AMBA por un valor de $400000 utilizando el carrier A 
+50000 envios en BSAS por un valor de $950000 utilizando el carrier B
+
+GRAILS
+pregunta 4
+
+Se busca obtener un informe sobre el seguimiento de un envio particular
+
+BASH
+pregunta 5
+
+a- 
+El script busca obtener el detalle de un atributo especifico de un usuario. El atributo services el cual esta vinculado 
+a las posibles formas de entrega del producto.
+
+b-
+
+users_id=(71665538 66146765 132961968 15096445 172753273 54152646)   					# vector de id usuarios
+for users_id in ${users_id[*]}									      					# recorro vector	
+do
+curl=$(curl -s "​ api.mercadolibre.com/users/$users_id/shipping_preferences​ " | jq -c
+'.services')																		# ejecuto request de consulta. Parseo JSON campo "services"
+echo "$users_id: $curl"															# imprimo response											
+done
+
+c-
+El output contiene 6 lineas, correspondiente a cada uno de los 6 usuarios consultados.
